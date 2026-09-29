@@ -1,0 +1,300 @@
+// SISTEM MANAJEMEN TANAMAN ASRAMA 
+// Amanda Kurnianingrum (26/577833/SV/27872)
+// Andea Christiani Hutagalung (26/577970/SV/27908)
+
+#include <iostream>//untuk akses menggunakan cout dan cin 
+#include <string> //untuk menyimpan dan mengolah teks atau tulisan
+#include <limits> //untuk mengetahui batas atau ukuran maksimal dan minimal yang bisa ditampung oleh suatu tipe data
+using namespace std; //untuk menyederhanakan tulisan perintah input dan output 
+
+// VARIABLE SCOPE - GLOBAL
+
+const int MAX_TANAMAN = 50;
+
+string namaTanaman[MAX_TANAMAN];
+string jenisTanaman[MAX_TANAMAN];
+string lokasiTanaman[MAX_TANAMAN];
+string kondisiTanaman[MAX_TANAMAN];
+int hariSiram[MAX_TANAMAN];
+int jumlahTanaman = 0;
+
+// FUNCTION OVERLOADING 
+
+// Function 1: Cek dan Input Data Penyiraman
+string cekPenyiraman(int hari)
+{
+    if (hari >= 3)
+    {
+        return "Perlu disiram";
+    }
+    else
+    {
+        return "Belum perlu disiram";
+    }
+}
+
+// Function 2: Cek dan Input Kondisi Tanaman
+string cekPenyiraman(int hari, string kondisi)
+{
+    if (hari >= 3 || kondisi == "Layu")
+    {
+        return "Perlu segera disiram";
+    }
+    else
+    {
+        return "Belum perlu disiram";
+    }
+}
+
+// TAMBAHKAN DATA TANAMAN
+
+void tambahTanaman()
+{
+    int jumlah;
+
+    cout << "====================================";
+    cout << "         TAMBAH DATA TANAMAN";
+    cout << "====================================";
+
+    cout << "Jumlah tanaman yang ingin ditambahkan: ";
+    cin >> jumlah;
+
+    // Untuk membersihkan input buffer
+    cin.ignore(numeric_limits<streamsize>::max(), ' ');
+
+    if (jumlah <= 0)
+    {
+        cout << "Jumlah tidak valid!";
+        return;
+    }
+
+    // Perulangan
+    for (int i = 0; i < jumlah; i++)
+    {
+        // Break
+        if (jumlahTanaman >= MAX_TANAMAN)
+        {
+            cout << "Data tanaman sudah penuh!";
+            break;
+        }
+
+        cout << "Tanaman ke-" << jumlahTanaman + 1 << endl;
+
+        cout << "Nama tanaman   : ";
+        getline(cin, namaTanaman[jumlahTanaman]);
+
+        cout << "Jenis tanaman  : ";
+        getline(cin, jenisTanaman[jumlahTanaman]);
+
+        cout << "Lokasi tanaman : ";
+        getline(cin, lokasiTanaman[jumlahTanaman]);
+
+        cout << "Hari sejak disiram: ";
+        cin >> hariSiram[jumlahTanaman];
+
+        // Untuk membersihkan input buffer
+        cin.ignore(numeric_limits<streamsize>::max(), ' ');
+
+        cout << "Kondisi tanaman (Sehat/Layu): ";
+        getline(cin, kondisiTanaman[jumlahTanaman]);
+
+        jumlahTanaman++;
+
+        cout << "Data berhasil ditambahkan! ";
+    }
+}
+// TAMPILKAN DATA TANAMAN
+
+void tampilkanTanaman()
+{
+    if (jumlahTanaman == 0)
+    {
+        cout << " Belum ada data tanaman ";
+        return;
+    }
+
+    cout << " ==================================== ";
+    cout << "          DAFTAR TANAMAN ";
+    cout << "==================================== ";
+
+    // FOR
+    for (int i = 0; i < jumlahTanaman; i++)
+    {
+        // CONTINUE
+        if (namaTanaman[i].empty())
+        {
+            continue;
+        }
+
+        cout << " Tanaman ke-" << i + 1 << endl;
+        cout << "Nama     : " << namaTanaman[i] << endl;
+        cout << "Jenis    : " << jenisTanaman[i] << endl;
+        cout << "Lokasi   : " << lokasiTanaman[i] << endl;
+        cout << "Kondisi  : " << kondisiTanaman[i] << endl;
+
+        cout << "Perawatan: "
+             << cekPenyiraman(
+                    hariSiram[i],
+                    kondisiTanaman[i]
+                )
+             << endl;
+    }
+}
+// CARI TANAMAN
+
+void cariTanaman()
+{
+    if (jumlahTanaman == 0)
+    {
+        cout << " Belum ada data tanaman ";
+        return;
+    }
+
+    string namaCari;
+    bool ditemukan = false;
+
+    // Membersihkan input buffer
+    cin.ignore(numeric_limits<streamsize>::max(), ' ');
+
+    cout << " Masukkan nama tanaman yang dicari: ";
+    getline(cin, namaCari);
+
+    // FOR
+    for (int i = 0; i < jumlahTanaman; i++)
+    {
+        if (namaTanaman[i] == namaCari)
+        {
+            cout << " ==================================== ";
+            cout << "          DATA DITEMUKAN ";
+            cout << "==================================== ";
+
+            cout << "Nama     : " << namaTanaman[i] << endl;
+            cout << "Jenis    : " << jenisTanaman[i] << endl;
+            cout << "Lokasi   : " << lokasiTanaman[i] << endl;
+            cout << "Kondisi  : " << kondisiTanaman[i] << endl;
+
+            cout << "Perawatan: "
+                 << cekPenyiraman(
+                        hariSiram[i],
+                        kondisiTanaman[i]
+                    )
+                 << endl;
+
+            ditemukan = true;
+
+            // BREAK
+            break;
+        }
+    }
+
+    if (!ditemukan)
+    {
+        cout << " Tanaman tidak ditemukan. ";
+    }
+}
+// CEK TANAMAN
+
+
+void cekTanaman()
+{
+    if (jumlahTanaman == 0)
+    {
+        cout << " Belum ada data tanaman. ";
+        return;
+    }
+
+    cout << " ==================================== ";
+    cout << "      TANAMAN YANG PERLU DIRAWAT ";
+    cout << "==================================== ";
+
+    bool adaTanaman = false;
+
+    // FOR
+    for (int i = 0; i < jumlahTanaman; i++)
+    {
+        // CONTINUE
+        if (hariSiram[i] < 3 && kondisiTanaman[i] == "Sehat")
+        {
+            continue;
+        }
+
+        cout << namaTanaman[i] << " -> "
+             << cekPenyiraman(
+                    hariSiram[i],
+                    kondisiTanaman[i]
+                )
+             << endl;
+
+        adaTanaman = true;
+    }
+
+    if (!adaTanaman)
+    {
+        cout << "Tidak ada tanaman yang perlu dirawat. ";
+    }
+}
+
+// MAIN PROGRAM
+
+int main()
+{
+    // VARIABLE SCOPE - LOCAL
+    int pilihan;
+
+    cout << "============================================";
+    cout << "       SISTEM MANAJEMEN TANAMAN";
+    cout << "============================================";
+
+    // WHILE
+    while (true)
+    {
+        cout << " ============== MENU UTAMA ============== ";
+        cout << "1. Tambah Data Tanaman ";
+        cout << "2. Tampilkan Semua Tanaman ";
+        cout << "3. Cari Tanaman ";
+        cout << "4. Cek Tanaman yang Perlu Dirawat ";
+        cout << "5. Keluar ";
+        cout << "========================================= ";
+
+        cout << "Pilih menu: ";
+        cin >> pilihan;
+
+        // SWITCH CASE
+        switch (pilihan)
+        {
+            case 1:
+                tambahTanaman();
+                break;
+
+            case 2:
+                tampilkanTanaman();
+                break;
+
+            case 3:
+                cariTanaman();
+                break;
+
+            case 4:
+                cekTanaman();
+                break;
+
+            case 5:
+                cout << " Program selesai. Terima kasih! ";
+                break;
+
+            default:
+                cout << " Pilihan tidak tersedia! ";
+
+                // CONTINUE
+                continue;
+        }
+
+        // BREAK untuk menghentikan WHILE
+        if (pilihan == 5)
+        {
+            break;
+        }
+    }
+
+    return 0;
+}
